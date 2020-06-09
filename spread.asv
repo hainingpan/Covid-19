@@ -1,0 +1,17 @@
+function param=spread(param)
+x=1:param.L;
+[X,Y]=meshgrid(x,x);
+infected_lin=find(param.infection);
+[infected_x,infected_y]=ind2sub([param.L,param.L],infected_lin);
+current=logical(param.infection);
+current_tmp=current;
+for i=1:length(infected_lin)
+    distance=sqrt((Y-infected_x(i)).^2+(X-infected_y(i)).^2);
+    probmat=param.prob(distance);    
+    infection_rand=rand(param.L);
+    immunity_rand=rand(param.L);
+    current_tmp=(infection_rand<=probmat)&logical(param.agent)&(immunity_rand>param.immunity)|current_tmp;
+end
+newly=current_tmp-current;
+param.infection=newly*param.lt+current.*(param.infection-1);
+end
