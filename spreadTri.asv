@@ -1,11 +1,13 @@
-function param=spread(param)
-x=1:param.L;
+function param=spreadTri(param)
+x=1:param.N;
 [X,Y]=meshgrid(x,x);
 current=~isinf(param.infection);
 infected_lin=find(current);
-[infected_x,infected_y]=ind2sub([param.L,param.L],infected_lin);
+infected_coor=parameters.r(infected_lin,:);
+infected_x=infected_coor(:,1);
+infected_y=infected_coor(:,2);
 current_tmp=current;
-parfor i=1:length(infected_lin)
+for i=1:length(infected_lin)
     distance=sqrt((Y-infected_x(i)).^2+(X-infected_y(i)).^2);
     probmat=param.prob(distance);    
     infection_rand=rand(param.L);
